@@ -19,18 +19,6 @@ An interactive CLI tool that uses multiple AI backends to generate and transform
 - **5 Architecture Patterns**: Monolithic, Microservices, Serverless, Event-Driven, Hexagonal
 - **Architecture Transformation**: Convert existing codebases between architectures
 - **Code Generation**: AI generates complete, runnable code with structure
----
-## Supported Architectures
-
-| Architecture | Description | Output |
-|--------------|-------------|--------|
-| **Monolithic** | Single deployable unit with layered structure (Controller/Service/Repository) | Single file or directory |
-| **Microservices** | Independent services with API gateway, Docker orchestration | Multiple services + docker-compose |
-| **Serverless** | AWS Lambda-style functions with event triggers | Functions + serverless.yml |
-| **Event-Driven** | Message bus, pub/sub pattern, async processing | Event handlers + message bus |
-| **Hexagonal** | Ports & adapters, clean architecture, dependency inversion | Domain/Ports/Adapters structure |
-
----
 
 ## Installation
 
