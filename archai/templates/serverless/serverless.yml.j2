@@ -1,0 +1,34 @@
+service: {{ app_name }}
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+
+functions:
+{% for function in functions %}
+  {{ function.name }}:
+    handler: functions/{{ function.name }}/handler.handle
+    description: {{ function.description }}
+    events:
+{% if function.http %}
+      - http:
+          path: {{ function.http.path }}
+          method: {{ function.http.method }}
+          cors: true
+{% endif %}
+{% if function.schedule %}
+      - schedule: {{ function.schedule }}
+{% endif %}
+
+{% endfor %}
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true

@@ -1,0 +1,6 @@
+"""Entry point for running archai as a module: python -m archai."""
+
+from archai.cli.app import main
+
+if __name__ == "__main__":
+    main()

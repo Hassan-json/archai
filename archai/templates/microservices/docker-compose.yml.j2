@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+{% for service in services %}
+  {{ service.name }}:
+    build:
+      context: ./services/{{ service.name }}
+      dockerfile: Dockerfile
+    ports:
+      - "{{ service.port }}:{{ service.port }}"
+    environment:
+      - SERVICE_NAME={{ service.name }}
+      - PORT={{ service.port }}
+    networks:
+      - {{ app_name }}-network
+{% if service.depends_on %}
+    depends_on:
+{% for dep in service.depends_on %}
+      - {{ dep }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+networks:
+  {{ app_name }}-network:
+    driver: bridge

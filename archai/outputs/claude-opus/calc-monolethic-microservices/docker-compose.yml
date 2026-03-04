@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # API Gateway Service
+  gateway-service:
+    build: ./services/gateway-service
+    ports:
+      - "8000:8000"
+    environment:
+      - CALCULATOR_SERVICE_URL=http://calculator-service:8001
+      - HISTORY_SERVICE_URL=http://history-service:8002
+    depends_on:
+      - calculator-service
+      - history-service
+    networks:
+      - calculator-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Calculator Service
+  calculator-service:
+    build: ./services/calculator-service
+    ports:
+      - "8001:8001"
+    environment:
+      - HISTORY_SERVICE_URL=http://history-service:8002
+    depends_on:
+      - history-service
+    networks:
+      - calculator-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # History Service
+  history-service:
+    build: ./services/history-service
+    ports:
+      - "8002:8002"
+    volumes:
+      - history-data:/app/data
+    networks:
+      - calculator-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis (optional, for future caching/session management)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - calculator-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Load Balancer (optional, for production)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - gateway-service
+    networks:
+      - calculator-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  history-data:
+    driver: local
+
+networks:
+  calculator-network:
+    driver: bridge

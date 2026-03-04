@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  hello_service:
+    build:
+      context: ./hello_service
+    ports:
+      - "5001:5001"
+
+  api_gateway:
+    build:
+      context: ./api_gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - hello_service

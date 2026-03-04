@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history-service
+  namespace: calculator
+  labels:
+    app: history-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: history-service
+  template:
+    metadata:
+      labels:
+        app: history-service
+    spec:
+      containers:
+      - name: history-service
+        image: history-service:latest
+        ports:
+        - containerPort: 8002
+        volumeMounts:
+        - name: history-storage
+          mountPath: /app/data
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: history-storage
+        persistentVolumeClaim:
+          claimName: history-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: history-service
+  namespace: calculator
+spec:
+  selector:
+    app: history-service
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: history-pvc
+  namespace: calculator
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
