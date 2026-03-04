@@ -10,24 +10,16 @@ An interactive CLI tool that uses multiple AI backends to generate and transform
 2. [Supported Architectures](#supported-architectures)
 3. [Installation](#installation)
 4. [Quick Start](#quick-start)
-5. [Usage](#usage)
-6. [Configuration](#configuration)
-7. [Experiments & Research](#experiments--research)
-8. [Project Structure](#project-structure)
-9. [Development](#development)
 
 ---
 
 ## Features
 
-
 - **Multiple AI Providers**: Claude CLI, OpenAI, LiteLLM
 - **5 Architecture Patterns**: Monolithic, Microservices, Serverless, Event-Driven, Hexagonal
 - **Architecture Transformation**: Convert existing codebases between architectures
 - **Code Generation**: AI generates complete, runnable code with structure
-
 ---
-
 ## Supported Architectures
 
 | Architecture | Description | Output |
@@ -168,16 +160,6 @@ archai -p openai -k $env:OPENAI_API_KEY
 archai -p ollama -m llama3.2
 ```
 
-### Generation Commands
-
-| Command Pattern | Description | Example |
-|-----------------|-------------|---------|
-| `create a monolithic [app] at [path]` | Generate monolithic app | `create a monolithic todo app at ./todo` |
-| `create a microservices [app] at [path]` | Generate microservices | `create a microservices api at ./api` |
-| `create a serverless [app] at [path]` | Generate Lambda functions | `create a serverless calculator at ./calc` |
-| `create an event-driven [app] at [path]` | Generate event-based app | `create an event-driven processor at ./proc` |
-| `create a hexagonal [app] at [path]` | Generate clean architecture | `create a hexagonal shop at ./shop` |
-
 ### Transformation Commands
 
 | Command Pattern | Description |
@@ -195,50 +177,6 @@ archai -p ollama -m llama3.2
 | `/providers` | List available AI providers |
 | `/architectures` | List supported architectures |
 | `/exit` or `exit` | Exit the application |
-
----
-
-## Configuration
-
-Configuration file: `~/.archai/config.yaml`
-
-```yaml
-default_provider: claude-cli
-
-providers:
-  claude-cli:                      # Uses Claude subscription (no API key!)
-    model: opus                    # opus, sonnet, haiku
-    timeout: 300
-
-  anthropic:
-    api_key: ${ANTHROPIC_API_KEY}
-    model: claude-sonnet-4-20250514
-
-  openai:
-    api_key: ${OPENAI_API_KEY}
-    model: gpt-4o
-
-  ollama:
-    base_url: http://localhost:11434
-    model: llama3.2
-
-  litellm:
-    base_url: http://localhost:8000/v1  # Custom endpoint
-    model: openai/my-model
-
-default_language: python
-theme: dark
-```
-
-### Environment Variables
-
-```bash
-# For OpenAI provider
-export OPENAI_API_KEY=sk-...
-
-# For Anthropic API provider
-export ANTHROPIC_API_KEY=sk-ant-...
-```
 
 ---
 
@@ -308,44 +246,3 @@ archai -p claude-cli -m opus
 ```
 
 ---
-
-## Project Structure
-
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed file descriptions.
-
-```
-archai/
-├── archai/                    # Main package
-│   ├── __init__.py
-│   ├── __main__.py           # Entry point (python -m archai)
-│   ├── ai/                   # AI provider implementations
-│   ├── architects/           # Architecture generators
-│   ├── transformers/         # Code transformation logic
-│   ├── cli/                  # CLI interface
-│   ├── config/               # Configuration management
-│   └── utils/                # Utilities
-├── experiments/              # Research experiments
-├── tests/                    # Test suite
-├── pyproject.toml           # Project configuration
-├── README.md                # This file
-└── ARCHITECTURE.md          # Codebase documentation
-```
-
----
-
-## Development
-
-```bash
-# Install with dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Format code
-black archai/
-ruff check archai/
-
-# Type checking
-mypy archai/
-```
