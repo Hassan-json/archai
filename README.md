@@ -77,57 +77,6 @@ python -m archai -p claude-cli
 > **Common Error:** `ModuleNotFoundError: No module named 'archai'`
 > This means you're in the wrong directory. Make sure you're in the project root (where `pyproject.toml` is), not inside the `archai/` subfolder.
 
-### Prerequisites
-
-#### For Claude CLI provider (recommended):
-
-**Linux/macOS:**
-```bash
-# Install Claude CLI
-npm install -g @anthropic-ai/claude-code
-
-# Login to Claude
-claude login
-```
-
-**Windows (PowerShell):**
-```powershell
-# 1. Install Node.js from https://nodejs.org/ (LTS version)
-
-# 2. Install Claude CLI
-npm install -g @anthropic-ai/claude-code
-
-# 3. Login to Claude
-claude login
-```
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# Install Claude CLI
-npm install -g @anthropic-ai/claude-code
-
-# Login
-claude login
-```
-
-#### For Ollama provider (local models):
-
-**Windows:**
-1. Download Ollama from https://ollama.ai/download/windows
-2. Run installer
-3. Open PowerShell and run:
-```powershell
-ollama pull llama3.2
-archai -p ollama -m llama3.2
-```
-
-**Linux/macOS:**
-```bash
-curl -fsSL https://ollama.ai/install.sh | sh
-ollama pull llama3.2
-```
 
 ## Quick Start
 
